@@ -21,3 +21,14 @@
   ([file](str/replace (slurp file) "\t" " ")))
 
 
+(defn p12
+  "12. 1列目をcol1.txtに，2列目をcol2.txtに保存
+  各行の1列目だけを抜き出したものをcol1.txtに，
+  2列目だけを抜き出したものをcol2.txtとしてファイルに保存せよ．
+  確認にはcutコマンドを用いよ．"
+  ([n] (p12 file-path n))
+  ([file n]
+   (let [col (->> (slurp file)
+                  (str/split-lines)
+                  (map #(str/split % #"\t")))]
+     (spit (format "out/col%d.txt" n) (apply str (map #(str (nth % (dec n)) "\n") col))))))
