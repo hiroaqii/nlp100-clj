@@ -79,3 +79,31 @@
      (print s))))
 
 
+(defn p16
+  "16. ファイルをN分割する
+
+  自然数Nをコマンドライン引数などの手段で受け取り，
+  入力のファイルを行単位でN分割せよ．
+  同様の処理をsplitコマンドで実現せよ．"
+  ([n] (p16 n file-path "p16-"))
+  ([n file prefix]
+   (let [col (->> (slurp file)
+                  (str/split-lines)
+                  (map #(str % "\n"))
+                  (partition-all n)
+                  (map #(str/join %)))]
+     (map-indexed #(spit (str "out/" prefix % ".txt") %2) col))))
+
+
+(defn p17
+  "17. １列目の文字列の異なり
+
+  1列目の文字列の種類（異なる文字列の集合）を求めよ．
+  確認にはsort, uniqコマンドを用いよ．"
+  ([] (p17 file-path))
+  ([file]
+   (let [col (->> (slurp file)
+                  (str/split-lines)
+                  (map #(str/split % #"\t"))
+                  (map first))]
+     (sort (into #{} col)))))
