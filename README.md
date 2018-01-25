@@ -1,10 +1,7 @@
 # nlp100-clj
 
-A Clojure library designed to ... well, that part is up to you.
+[言語処理100本ノック](http://www.cl.ecei.tohoku.ac.jp/nlp100/) in Clojure
 
-## Usage
-
-FIXME
 
 ## License
 
