@@ -99,7 +99,10 @@
   "17. １列目の文字列の異なり
 
   1列目の文字列の種類（異なる文字列の集合）を求めよ．
-  確認にはsort, uniqコマンドを用いよ．"
+  確認にはsort, uniqコマンドを用いよ．
+
+  (並べ替えまで。ファイル出力は省略)
+  "
   ([] (p17 file-path))
   ([file]
    (let [col (->> (slurp file)
@@ -107,3 +110,37 @@
                   (map #(str/split % #"\t"))
                   (map first))]
      (sort (into #{} col)))))
+
+
+(defn p18
+  "18. 各行を3コラム目の数値の降順にソート
+
+  各行を3コラム目の数値の逆順で整列せよ（注意: 各行の内容は変更せずに並び替えよ）．
+  確認にはsortコマンドを用いよ（この問題はコマンドで実行した時の結果と合わなくてもよい）．
+
+  (並べ替えまで。ファイル出力は省略)"
+  ([] (p18 file-path))
+  ([file]
+   (let [col (->> (slurp file)
+                  (str/split-lines)
+                  (map #(str/split % #"\t")))]
+     (sort-by #(Double/parseDouble (nth % 2)) > col))))
+
+
+(defn p19
+  "19. 各行の1コラム目の文字列の出現頻度を求め，出現頻度の高い順に並べる
+
+  各行の1列目の文字列の出現頻度を求め，その高い順に並べて表示せよ．
+  確認にはcut, uniq, sortコマンドを用いよ．
+
+  (並べ替えまで。ファイル出力は省略)"
+  ([] (p19 file-path))
+  ([file]
+   (let [col (->> (slurp file)
+                  (str/split-lines)
+                  (map #(str/split % #"\t"))
+                  (map first))]
+     (->> (group-by identity col)
+          (vals)
+          (sort-by count >)
+          (map first)))))
