@@ -6,7 +6,9 @@
 (def file-path "resources/jawiki-country.json")
 
 (defn p20
-  "Wikipedia記事のJSONファイルを読み込み，「イギリス」に関する記事本文を表示せよ．
+  "JSONデータの読み込み
+
+  Wikipedia記事のJSONファイルを読み込み，「イギリス」に関する記事本文を表示せよ．
   問題21-29では，ここで抽出した記事本文に対して実行せよ．"
   []
   (let [lines (str/split-lines (slurp file-path))
@@ -14,54 +16,22 @@
         m (first (filter #(= (% "title") "イギリス") jsons))]
     (m "text")))
 
+(def eng-text (p20))
+
+(defn p21
+  "21. カテゴリ名を含む行を抽出
+
+  記事中でカテゴリ名を宣言している行を抽出せよ"
+  []
+  (->> (str/split-lines eng-text)
+       (filter #(re-seq #"\[\[Category:(.+?)\]\]$" %))))
 
 
+(defn p22
+  "22. カテゴリ名の抽出
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-(json/generate-string {:foo "bar" :baz 5})
-
-(def a (json/parse-stream (io/reader file-path)))
-
-(def a (str/split-lines (slurp file-path)))
-
-
-
-
-(last b)
-
-
-
-
+  記事のカテゴリ名を（行単位ではなく名前で）抽出せよ "
+  []
+  (->> (str/split-lines eng-text)
+       (map #(nth (re-matches #"\[\[Category:(.+?)\]\]$" %) 1))
+       (filter some?)))
