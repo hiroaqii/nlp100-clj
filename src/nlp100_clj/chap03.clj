@@ -35,3 +35,12 @@
   (->> (str/split-lines eng-text)
        (map #(nth (re-matches #"\[\[Category:(.+?)\]\]$" %) 1))
        (filter some?)))
+
+
+(defn p23
+  "23. セクション構造
+
+  記事中に含まれるセクション名とそのレベル（例えば== セクション名 ==なら1）を表示せよ．"
+  []
+  (->> (re-seq #"(={2,})\s*(.+?)\s*\1" eng-text)
+       (map #(list (last %) (dec (count (second %)))))))
