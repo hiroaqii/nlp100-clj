@@ -23,8 +23,7 @@
 
   記事中でカテゴリ名を宣言している行を抽出せよ"
   []
-  (->> (str/split-lines eng-text)
-       (filter #(re-seq #"\[\[Category:(.+?)\]\]$" %))))
+  (->> (re-seq #"\[\[Category:.+?\]\]" eng-text)))
 
 
 (defn p22
@@ -32,9 +31,8 @@
 
   記事のカテゴリ名を（行単位ではなく名前で）抽出せよ "
   []
-  (->> (str/split-lines eng-text)
-       (map #(nth (re-matches #"\[\[Category:(.+?)\]\]$" %) 1))
-       (filter some?)))
+  (->> (re-seq #"\[\[Category:(.+?)\]\]" eng-text)
+       (map second)))
 
 
 (defn p23
