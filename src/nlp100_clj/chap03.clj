@@ -6,7 +6,7 @@
 (def file-path "resources/jawiki-country.json")
 
 (defn p20
-  "JSONデータの読み込み
+  "20. JSONデータの読み込み
 
   Wikipedia記事のJSONファイルを読み込み，「イギリス」に関する記事本文を表示せよ．
   問題21-29では，ここで抽出した記事本文に対して実行せよ．"
@@ -42,3 +42,11 @@
   []
   (->> (re-seq #"(={2,})\s*(.+?)\s*\1" eng-text)
        (map #(list (last %) (dec (count (second %)))))))
+
+
+(defn p24
+  "24. ファイル参照の抽出
+
+  記事から参照されているメディアファイルをすべて抜き出せ．"
+  []
+  (map second (re-seq #"[ファイル|File]:(.+?)\|" eng-text)))
