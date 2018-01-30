@@ -50,3 +50,15 @@
   記事から参照されているメディアファイルをすべて抜き出せ．"
   []
   (map second (re-seq #"[ファイル|File]:(.+?)\|" eng-text)))
+
+
+(defn p25
+  "25. テンプレートの抽出
+
+  記事中に含まれる「基礎情報」テンプレートのフィールド名と値を抽出し，辞書オブジェクトとして格納せよ．"
+  []
+  (let [template (second (re-find #"\{\{基礎情報 国\n\|([\s\S]*\n)\}\}\n" eng-text))]
+    (->> (str/split template #"\n\|")
+         (map #(str/split % #" = "))
+         (into {}))))
+
