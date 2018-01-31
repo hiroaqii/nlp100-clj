@@ -52,16 +52,19 @@
   (map second (re-seq #"[ファイル|File]:(.+?)\|" eng-text)))
 
 
+
+(def template (second (re-find #"\{\{基礎情報 国\n\|([\s\S]*\n)\}\}\n" eng-text)))
+
+
 (defn p25
   "25. テンプレートの抽出
 
   記事中に含まれる「基礎情報」テンプレートのフィールド名と値を抽出し，辞書オブジェクトとして格納せよ．"
-  ([](p25 eng-text))
+  ([](p25 template))
   ([s]
-   (let [template (second (re-find #"\{\{基礎情報 国\n\|([\s\S]*\n)\}\}\n" eng-text))]
-     (->> (str/split template #"\n\|")
-          (map #(str/split % #" = "))
-          (into {})))))
+   (->> (str/split s #"\n\|")
+        (map #(str/split % #" = "))
+        (into {}))))
 
 
 (defn p26
@@ -69,7 +72,6 @@
 
   25の処理時に，テンプレートの値からMediaWikiの強調マークアップ
  （弱い強調，強調，強い強調のすべて）を除去してテキストに変換せよ"
-  []
-  (p25 (str/replace eng-text #"('{5}|'{2,3})(.+?)\1" "$2")))
-
+  ([](p26 template))
+  ([s] (p25 (str/replace s #"('{5}|'{2,3})(.+?)\1" "$2"))))
 
