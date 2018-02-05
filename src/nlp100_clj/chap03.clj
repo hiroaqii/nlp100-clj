@@ -1,7 +1,8 @@
 (ns nlp100-clj.chap02
   "第3章: 正規表現"
   (:require [clojure.string :as str]
-            [cheshire.core :as json]))
+            [cheshire.core :as json]
+            [clj-http.client :as client]))
 
 (def file-path "resources/jawiki-country.json")
 
@@ -97,3 +98,22 @@
                    (str/replace #"\{\{(.*)?\|+(.*)?\|+(.*)?\}\}" "$3") ;{{lang|en|hogehoge}} -> hogehoge
                    (str/replace #"\*{1,3}" ""))]
          (p27 s))))
+
+
+(defn p29
+  "29. 国旗画像のURLを取得する
+
+  テンプレートの内容を利用し，国旗画像のURLを取得せよ．
+  （ヒント: MediaWiki APIのimageinfoを呼び出して，ファイル参照をURLに変換すればよい）"
+  []
+  (let [img-name ((p25 template) "国旗画像")
+        base-url "https://ja.wikipedia.org/w/api.php"
+        query-params {:format "json"
+                      :action "query"
+                      :prop   "imageinfo"
+                      :iiprop "url"
+                      :titles (str "Image:" img-name)}]
+    (-> (client/get base-url {:query-params query-params :as :json})
+        (get-in [:body :query :pages :-1 :imageinfo])
+        (first)
+        (:url))))
