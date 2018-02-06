@@ -18,7 +18,7 @@
 (defn init
   "夏目漱石の小説『吾輩は猫である』の文章（neko.txt）をkuromojiを使って形態素解析し，
   その結果をneko.txt.kuromojiというファイルに保存
-  (オリジナルの問題ははKuromojiでなくMeCabを使用する）"
+  (オリジナルの問題はMeCabを使用しているが、Kuromojiを使用する）"
 
   []
   (let [tokens (flatten (map #(tokenize %) (str/split-lines (slurp "resources/neko.txt"))))
