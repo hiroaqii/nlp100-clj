@@ -12,7 +12,7 @@
 
 (defn tokenize [s]
   (let [col (.tokenize tokenizer s)]
-    (map #(apply str (.getSurface %1) "\t" (.getAllFeatures %1)) col)))
+    (map #(apply str (.getSurface %1) "," (.getAllFeatures %1)) col)))
 
 
 (defn init
@@ -25,4 +25,22 @@
         s (str/join "\n" tokens)]
     (spit "resources/neko.txt.kuromoji" s)))
 
-;(init)
+
+(defn p30
+  "30. 形態素解析結果の読み込み
+
+  形態素解析結果（neko.txt.kuromoji）を読み込むプログラムを実装せよ．
+  ただし，各形態素は表層形（surface），基本形（base），品詞（pos），品詞細分類1（pos1）をキーとするマッピング型に格納し，
+  1文を形態素（マッピング型）のリストとして表現せよ．第4章の残りの問題では，ここで作ったプログラムを活用せよ．
+  "
+  []
+  (let [lines (->> (slurp "resources/neko.txt.kuromoji")
+                   (str/split-lines )
+                   (map #(str/split % #",")))]
+    (map
+     #(hash-map :surface (nth % 0)
+                :pos     (nth % 1)
+                :pos1    (nth % 2)
+                :base    (nth % 7)
+                )
+         lines)))
