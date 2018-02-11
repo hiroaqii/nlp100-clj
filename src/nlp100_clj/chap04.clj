@@ -70,6 +70,22 @@
 
   サ変接続の名詞をすべて抽出せよ．"
   []
-  (->> (filter (and #(= "名詞" (:pos %)) #(= "サ変接続" (:pos1 %)))(p30))
+  (->> (filter #(and (= "名詞" (:pos %)) (= "サ変接続" (:pos1 %)))(p30))
        (map #(:surface %))))
+
+
+(defn p34
+  "34. 「AのB」
+
+  2つの名詞が「の」で連結されている名詞句を抽出せよ．"
+  []
+  (->> (partition 3 1 (p30))
+       (filter #(and
+                 (= "名詞" (:pos (first %)))
+                 (= "の"   (:surface (second %)))
+                 (= "名詞" (:pos (last %)))))
+       (map #(str (:surface (first %))
+                  (:surface (second %))
+                  (:surface (last %))))))
+
 
