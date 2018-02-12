@@ -89,3 +89,14 @@
                   (:surface (last %))))))
 
 
+(defn p35
+  "35. 名詞の連接
+
+  名詞の連接（連続して出現する名詞）を最長一致で抽出せよ．"
+  []
+  (->> (partition-by #(:pos %) (p30))
+       (filter #(= "名詞" (:pos (first %))))
+       (map #(map :surface %))
+       (map #(apply str %))))
+
+
