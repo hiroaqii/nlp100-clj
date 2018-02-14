@@ -3,7 +3,9 @@
 
   メモ：MeCabではなくkuromojiを使用。
   "
-  (:require [clojure.string :as str])
+  (:require [clojure.string :as str]
+            [incanter.charts :as charts]
+            [incanter.core :as incanter])
   (:import [com.atilika.kuromoji.ipadic Token Tokenizer]))
 
 
@@ -104,9 +106,23 @@
   "36. 単語の出現頻度
 
   文章中に出現する単語とその出現頻度を求め，出現頻度の高い順に並べよ"
+
   []
   (->> (map :surface (p30))
        (frequencies)
        (sort-by val >)))
+
+
+(defn p37
+  "37. 頻度上位10語
+
+  出現頻度が高い10語とその出現頻度をグラフ（例えば棒グラフなど）で表示せよ．"
+  []
+  (let [top10 (take 10 (p36))]
+    (incanter/view (charts/bar-chart
+                    (map first top10)  ;単語
+                    (map second top10) ;出現回数
+                    :x-label "word"
+                    :y-label "frequency"))))
 
 
