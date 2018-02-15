@@ -126,3 +126,19 @@
                     :y-label "frequency"))))
 
 
+(defn p38
+  "38. ヒストグラム
+
+  単語の出現頻度のヒストグラム（横軸に出現頻度，縦軸に出現頻度をとる単語の種類数を棒グラフで表したもの）を描け．"
+  []
+  (let [ret (->> (map :surface (p30))
+                 (frequencies)       ;単語と単語の出現頻度         ex. [["の" 9193] ["。" 7486] ....]
+                 (map second)        ;単語の出現頻度              ex. [9193 7486 ....]
+                 (frequencies)       ;単語の出現頻度と単語の種類数  ex. [[9193 1] [7486 1] ....]
+                 (sort-by second >)) ];単語の種類数でソート         ex. [[6132 1] [2262 2] ...]
+    (incanter/view (charts/bar-chart
+                    (map first ret)
+                    (map second ret)
+                    :x-label "word count"
+                    :y-label "frequency"))))
+
