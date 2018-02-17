@@ -142,3 +142,22 @@
                     :x-label "word count"
                     :y-label "frequency"))))
 
+
+(defn p39
+  "39. Zipfの法則
+
+  単語の出現頻度順位を横軸，その出現頻度を縦軸として，両対数グラフをプロットせよ． "
+
+  []
+  (let [ret (->> (map :surface (p30))
+                 (frequencies)
+                 (map second)
+                 (frequencies)
+                 (sort-by second >))
+        chart (charts/scatter-plot
+               (map first ret)
+               (map second ret))]
+    (-> chart
+        (charts/set-axis :y (charts/log-axis :label "word count"))
+        (charts/set-axis :x (charts/log-axis :label "frequency"))
+        (incanter/view))))
