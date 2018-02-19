@@ -13,15 +13,15 @@
     (spit "resources/neko.txt.cabocha" s)))
 
 
-(defrecord Morph [surface base ops ops1])
+;; p40
 
+(defrecord Morph [surface base ops ops1])
 
 (defn line->Marph [s]
   (let [lst (str/split s #"\t")
         surface (first lst)
         other (str/split (second lst) #",")]
     (->Morph surface (nth other 6) (first other) (second other))))
-
 
 (defn p40
   "40. 係り受け解析結果の読み込み（形態素）
@@ -37,5 +37,26 @@
                  (filter #(not= "EOS" (first %)) ))
         marph-lst (map #(map line->Marph %) lst)]
     (nth marph-lst 2)))
+
+
+
+;; p41
+
+(defrecord Chunk [morphs dst srcs])
+
+(defn str->dst-map
+  " 文節番号と係り先の文節番号をmap形式で返却
+  例： * 6 7D 0/2 -1.148488 -> {6 7} "
+  [s]
+  (let [lst (str/split s #" ")
+        src (second lst)
+        dst (str/replace (nth lst 2) #"D" "")]
+    (hash-map src dst)))
+
+(defn dst-map->src-map
+  "keyとvalを入れ替え、同一のvalをkeyに纏めたmapを作成
+  例：{0 5, 1 2, 2 3, 3 4, 4 5, 5 -1} -> {5 [0 4], 2 [1], 3 [2], 4 [3], -1 [5]}"
+  [m]
+  (reduce #(merge-with into %1 {(val %2) [(key %2)]}) {} m))
 
 
