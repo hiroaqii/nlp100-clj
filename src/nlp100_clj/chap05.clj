@@ -38,6 +38,8 @@
         marph-lst (map #(map line->Marph %) lst)]
     (nth marph-lst 2)))
 
+(def j (conj [] [1]))
+
 
 
 ;; p41
@@ -55,8 +57,31 @@
 
 (defn dst-map->src-map
   "keyとvalを入れ替え、同一のvalをkeyに纏めたmapを作成
-  例：{0 5, 1 2, 2 3, 3 4, 4 5, 5 -1} -> {5 [0 4], 2 [1], 3 [2], 4 [3], -1 [5]}"
+  例： {0 5, 1 2, 2 3, 3 4, 4 5, 5 -1} -> {5 [0 4], 2 [1], 3 [2], 4 [3], -1 [5]}"
   [m]
   (reduce #(merge-with into %1 {(val %2) [(key %2)]}) {} m))
+
+
+(defn gen-Chunk [morph-lst dst-lst]
+  (let [x (reduce #(merge-with into %1 {(val %2) [(key %2)]}) {} dst-lst)]
+    (map (fn [idx morph dst] (->Chunk morph (last dst) (x (str idx)))) (range) morph-lst dst-lst)))
+
+
+(defn lst->Chunk [lst]
+  (loop [morph-lst [], dst {}, head false, lst lst]
+    (let [s (first lst)]
+      (if (empty? s)
+        (gen-Chunk morph-lst dst)
+        (if (str/starts-with? s "*")
+          (recur morph-lst
+                 (conj dst (get-dst s))
+                 true
+                 (rest lst))
+          (recur (if head
+                   (conj morph-lst [(line->Marph s)])
+                   (conj (vec (drop-last morph-lst)) (conj (last morph-lst)(line->Marph s))))
+                 dst
+                 false
+                 (rest lst)))))))
 
 
