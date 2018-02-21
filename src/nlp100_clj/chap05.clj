@@ -38,7 +38,6 @@
         marph-lst (map #(map line->Marph %) lst)]
     (nth marph-lst 2)))
 
-(def j (conj [] [1]))
 
 
 
@@ -74,7 +73,7 @@
         (gen-Chunk morph-lst dst)
         (if (str/starts-with? s "*")
           (recur morph-lst
-                 (conj dst (get-dst s))
+                 (conj dst (str->dst-map s))
                  true
                  (rest lst))
           (recur (if head
@@ -83,5 +82,24 @@
                  dst
                  false
                  (rest lst)))))))
+
+
+(defn p41
+  "41. 係り受け解析結果の読み込み（文節・係り受け）
+
+  40に加えて，文節を表すクラスChunkを実装せよ．このクラスは形態素（Morphオブジェクト）のリスト（morphs），
+  係り先文節インデックス番号（dst），係り元文節インデックス番号のリスト（srcs）をメンバ変数に持つこととする．
+  さらに，入力テキストのCaboChaの解析結果を読み込み，１文をChunkオブジェクトのリストとして表現し，8文目の文節の文字列と係り先を表示せよ．
+  第5章の残りの問題では，ここで作ったプログラムを活用せよ．"
+  ([] (p41 8))
+  ([n]
+   (let [lst (->> (slurp "resources/neko.txt.cabocha")
+                  (str/split-lines)
+                  (partition-by #(= "EOS" %))
+                  (filter #(not= "EOS" (first %))))
+         chunks (nth (map lst->Chunk lst) (dec n))]
+     (map (fn [c] (hash-map :surface (apply str (map :surface (:morphs c)))
+                            :srcs (:srcs c)
+                            :dst (:dst y))) chunks))))
 
 
