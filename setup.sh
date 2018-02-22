@@ -9,3 +9,6 @@ gzip -d ${RESOURCE_DIR}/jawiki-country.json.gz
 
 #chap04
 wget http://www.cl.ecei.tohoku.ac.jp/nlp100/data/neko.txt -P ${RESOURCE_DIR} 
+
+#chap05
+#brew install cabocha
